@@ -1,0 +1,775 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "version": "1.0",
+        "title": "API DE GERENCIAMENTO DE CONTATOS",
+        "description": "Documentação da API criada em NodeJs e Typescript para o gerenciamento de contatos",
+        "contact": {
+            "name": "Suporte da API",
+            "url": "https://www.ifpb.edu.br/cajazeiras"
+        },
+        "license": {
+            "name": "IFPB - Campus Cajazeiras",
+            "url": "https://www.ifpb.edu.br/cajazeiras"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/contact/add": {
+            "post": {
+                "description": "Cria/Adiciona um novo contato a lista",
+                "operationId": "contactAdd",
+                "parameters": [],
+                "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Contact"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "RESPOSTA AO NOVO CONTATO SER CRIADO COM SUCESSO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContactCreate"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "QUANDO UM ERRO OCORRER NA CRIAÇÃO DE UM NOVO CONTATO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorContactCreate"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contact/update": {
+            "put": {
+                "description": "Atualiza os dados de um contato da lista",
+                "operationId": "contactUpdate",
+                "parameters": [],
+                "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactCreate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "RESPOSTA AO CONSEGUIR ATUALIZAR O CONTATO"
+                    },
+                    "500": {
+                        "description": "QUANDO UM ERRO OCORRER NA HORA DE SE ATUALIZAR UM CONTATO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorContactUp"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contact/delete/{id}": {
+            "delete": {
+                "description": "Deleta um contato existente da lista",
+                "operationId": "contactDelete",
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }],
+                "required": true,
+                "responses": {
+                    "204": {
+                        "description": "RESPOSTA AO SE CONSEGUIR EXCLUIR UM CONTATO EXISTENTE NA LISTA"
+                    },
+                    "500": {
+                        "description": "QUANDO UM ERRO OCORRE AO TENTAR DELETAR UM CONTATO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorContactDe"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contact/search/{id}": {
+            "get": {
+                "description": "Busca por um contato específico, através do seu id",
+                "operationId": "contactSearch",
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }],
+                "required": true,
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA AO SE ENCONTRAR UM CONTATO PELO ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContactCreate"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ERRO AO CRIAR CONTATO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorContactSe"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contact/list": {
+            "get": {
+                "description": "Lista todos os contatos existentes",
+                "operationId": "contactList",
+                "parameters": [],
+                "required": true,
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA AO SE LISTAR OS CONTATOS",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ContactCreate"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ERRO AO SE LISTAR OS CONTATOS",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorContactLi"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/add": {
+            "post": {
+                "description": "Cria/Adiciona um novo usuário ao sistema",
+                "operationId": "userAdd",
+                "parameters": [],
+                "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "RESPOSTA ESPERADA AO SE CRIAR UM NOVO USUÁRIO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserCreate"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "QUANDO JÁ EXISTIR UM USUÁRIO COM O MESMO E-MAIL CADASTRADO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorUserAd"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "description": "Efetua o login de um usuário previamente cadastrado",
+                "operationId": "userLogin",
+                "parameters": [],
+                "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLogin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA QUANDO UM USUÁRIO EFETUAR O LOGIN",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageRespLoginOne"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "QUANDO A SENHA DO USUÁRIO ESTIVER INCORRETA OU O USUÁRIO NÃO TIVER VALIDADO A CONTA",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageRespLoginTwo"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "QUANDO UM USUÁRIO NÃO EXISTIR/ESTIVER CADASTRADO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageRespLoginThree"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "get": {
+                "description": "Efetua o logout do usuário que logou no sistema",
+                "operationId": "userLogout",
+                "parameters": [],
+                "required": true,
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA QUANDO O USUÁRIO EFETUAR LOGOUT",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageSuccessUserLogout"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/validate/{id}": {
+            "get": {
+                "description": "Valida o usuário via url recebida pelo email com um id",
+                "operationId": "userValidate",
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }],
+                "required": true,
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA QUANDO O USUÁRIO ACESSAR A URL PARA VALIDAR SUA CONTA",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageSuccessUserValidate"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/list": {
+            "get": {
+                "description": "Lista os usuários cadastrados no sistema",
+                "operationId": "userList",
+                "parameters": [],
+                "required": true,
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA QUANDO OS USUÁRIOS FOREM LISTADOS",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserCreate"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "RESPOSTA ESPERADA QUANDO OS USUÁRIOS NÃO FOREM LISTADOS",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorUserList"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/administrator/login": {
+            "post": {
+                "description": "Efetua o login do administrador existente no sistema",
+                "operationId": "adminLogin",
+                "parameters": [],
+                "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminLogin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA AO SE EFETUAR O LOGIN",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminCreate"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "RESPOSTA ESPERADA CASO A SENHA ESTEJA INCORRETA",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorLoginAdmin1"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "RESPOSTA ESPERADA CASO ADMINISTRADOR NÃO SEJA ENCONTRADO",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorLoginAdmin2"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/administrator/update": {
+            "put": {
+                "description": "Atualiza o código de acesso e a senha do administrador",
+                "operationId": "adminUpdate",
+                "parameters": [],
+                "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminLogin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA AO SEREM ATUALIZADOS OS DADOS DO ADMINISTRADOR",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdminCreate"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "RESPOSTA ESPERADA AO NÃO SE ATUALIZAR OS DADOS DO ADMINISTRADOR",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageErrorUpdateAdmin"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/administrator/logout": {
+            "get": {
+                "description": "Efetua o logout do administrador no sistema",
+                "operationId": "adminLogout",
+                "parameters": [],
+                "required": true,
+                "responses": {
+                    "200": {
+                        "description": "RESPOSTA ESPERADA QUANDO O ADMINISTRADOR EFETUAR LOGOUT",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageSuccessUserLogout"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "codeAccess": {
+                "type": "string",
+                "example": "568749"
+            },
+            "telephone": {
+                "type": "string",
+                "example": "(83) 99647-1318"
+            },
+            "id": {
+                "type": "number",
+                "example": 1
+            },
+            "name": {
+                "type": "string",
+                "example": "Luciano Gouveia Rosa"
+            },
+            "email": {
+                "type": "string",
+                "example": "seuemail@dominio.com"
+            },
+            "username": {
+                "type": "string",
+                "example": "LucianoRosa"
+            },
+            "password": {
+                "type": "string",
+                "example": "pipoca03"
+            },
+            "active": {
+                "type": "boolean",
+                "example": false
+            },
+            "ContactCreate": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/id"
+                    },
+                    "name": {
+                        "$ref": "#/components/schemas/name"
+                    },
+                    "telephone": {
+                        "$ref": "#/components/schemas/telephone"
+                    }
+                }
+            },
+            "UserCreate": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/id"
+                    },
+                    "username": {
+                        "$ref": "#/components/schemas/username"
+                    },
+                    "email": {
+                        "$ref": "#/components/schemas/email"
+                    },
+                    "active": {
+                        "$ref": "#/components/schemas/active"
+                    }
+                }
+            },
+            "AdminCreate": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/id"
+                    },
+                    "codeAccess": {
+                        "$ref": "#/components/schemas/codeAccess"
+                    }
+                }
+            },
+            "MessageErrorContactAdd": {
+                "type": "string",
+                "example": "ERRO AO SALVAR CONTATO"
+            },
+            "MessageErrorContactCreate": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorContactAdd"
+                    }
+                }
+            },
+            "MessageErrorUserAdd": {
+                "type": "string",
+                "example": "USUÁRIO COM E-MAIL JÁ CADASTRADO"
+            },
+            "MessageErrorContactUpdate": {
+                "type": "string",
+                "example": "ERRO AO ATUALIZAR CONTATO"
+            },
+            "MessageErrorContactDelete": {
+                "type": "string",
+                "example": "ERRO AO EXCLUIR CONTATO"
+            },
+            "MessageErrorContactSearch": {
+                "type": "string",
+                "example": "ERRO AO BUSCAR CONTATO"
+            },
+            "MessageErrorContactList": {
+                "type": "string",
+                "example": "ERRO AO RECUPERAR TODOS OS CONTATOS"
+            },
+            "MessageSuccessLogoutUser": {
+                "type": "string",
+                "example": "LOGOUT EFETUADO COM SUCESSO"
+            },
+            "MessageSuccessValidateUser": {
+                "type": "string",
+                "example": "USUÁRIO VALIDADO"
+            },
+            "MessageErrorListUser": {
+                "type": "string",
+                "example": "IMPOSSÍVEL LISTAR USUÁRIOS"
+            },
+            "MessageErrorAdminLogin1": {
+                "type": "string",
+                "example": "SENHA INCORRETA"
+            },
+            "MessageErrorAdminLogin2": {
+                "type": "string",
+                "example": "ADMINISTRADOR NÃO EXISTE"
+            },
+            "MessageErrorAdminUpdate": {
+                "type": "string",
+                "example": "ERRO AO ATUALIZAR ADMINISTRADOR"
+            },
+            "MessageErrorUpdateAdmin": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorAdminUpdate"
+                    }
+                }
+            },
+            "MessageErrorLoginAdmin1": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorAdminLogin1"
+                    }
+                }
+            },
+            "MessageErrorLoginAdmin2": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorAdminLogin2"
+                    }
+                }
+            },
+            "MessageSuccessUserValidate": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageSuccessValidateUser"
+                    }
+                }
+            },
+            "MessageErrorUserList": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorListUser"
+                    }
+                }
+            },
+            "MessageSuccessUserLogout": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageSuccessLogoutUser"
+                    }
+                }
+            },
+            "MessageErrorContactCr": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorContactAdd"
+                    }
+                }
+            },
+            "MessageErrorContactUp": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorContactUpdate"
+                    }
+                }
+            },
+            "MessageErrorContactDe": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorContactDelete"
+                    }
+                }
+            },
+            "MessageErrorContactSe": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorContactSearch"
+                    }
+                }
+            },
+            "MessageErrorContactLi": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorContactList"
+                    }
+                }
+            },
+            "MessageErrorUserAd": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageErrorUserAdd"
+                    }
+                }
+            },
+            "Contact": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/components/schemas/name"
+                    },
+                    "telephone": {
+                        "$ref": "#/components/schemas/telephone"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "$ref": "#/components/schemas/name"
+                    },
+                    "email": {
+                        "$ref": "#/components/schemas/email"
+                    },
+                    "password": {
+                        "$ref": "#/components/schemas/password"
+                    }
+                }
+            },
+            "AdminLogin": {
+                "type": "object",
+                "properties": {
+                    "codeAccess": {
+                        "$ref": "#/components/schemas/codeAccess"
+                    },
+                    "password": {
+                        "$ref": "#/components/schemas/password"
+                    }
+                }
+            },
+            "UserLogin": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "$ref": "#/components/schemas/email"
+                    },
+                    "password": {
+                        "$ref": "#/components/schemas/password"
+                    }
+                }
+            },
+            "MessageRespLoginO": {
+                "type": "string",
+                "example": "LOGIN EFETUADO COM SUCESSO"
+            },
+            "MessageRespLoginOne": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageRespLoginO"
+                    }
+                }
+            },
+            "MessageRespLoginT": {
+                "type": "string",
+                "example": "SENHA INCORRETA OU USUÁRIO NÃO EXISTE"
+            },
+            "MessageRespLoginTwo": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageRespLoginT"
+                    }
+                }
+            },
+            "MessageRespLoginTh": {
+                "type": "string",
+                "example": "USUÁRIO NÃO EXISTE"
+            },
+            "MessageRespLoginThree": {
+                "type": "object",
+                "properties": {
+                    "MENSAGEM": {
+                        "$ref": "#/components/schemas/MessageRespLoginTh"
+                    }
+                }
+            }
+        }
+    }
+}
