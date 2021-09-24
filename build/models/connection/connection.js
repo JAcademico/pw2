@@ -10,7 +10,10 @@ const connection = new sequelize_1.Sequelize(`${process.env.DATABASE_URL}`, {
     ssl: true,
     dialect: 'postgres',
     dialectOptions: {
-        ssl: true,
+        ssl: {
+            require: true,
+            rejectUnauthorized: false,
+        },
     },
 });
 exports.default = connection;
