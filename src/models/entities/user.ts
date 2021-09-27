@@ -17,7 +17,7 @@ const User = connection.define(
       allowNull: false,
       validate: {
         notEmpty: false,
-        len: [6, 255],
+
       },
     },
     email: {
@@ -25,7 +25,7 @@ const User = connection.define(
       allowNull: false,
       validate: {
         notEmpty: false,
-        len: [6, 255],
+
       },
     },
     password: {
@@ -33,7 +33,7 @@ const User = connection.define(
       allowNull: false,
       validate: {
         notEmpty: false,
-        len: [6, 255],
+
       },
     },
     active: {
