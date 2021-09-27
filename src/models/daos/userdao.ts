@@ -19,6 +19,15 @@ export default class UserDao {
     }
   }
 
+  public static async delete(id: string): Promise<number | null> {
+    try {
+      const user = await User.destroy({ where: { id: Number(id) } });
+      return user;
+    } catch (err) {
+      return null;
+    }
+  }
+
   public static async search(id: string): Promise<Model | null> {
     try {
       const user = await User.findOne({ where: { email: id } });

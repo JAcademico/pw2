@@ -250,6 +250,41 @@
       }
     },
 
+    "/user/delete/{id}":{
+      "delete":{
+        "description": "Deleta o usuário existente no sistema",
+        "operationId": "deleteUser",
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required":true
+        }],
+        "required": true,
+        "responses":{
+          "200":{
+            "description": "RESPOSTA ESPERADA QUANDO O USUÁRIO FOR EXCLUÍDO",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/MessageSuccessUserDelete"
+                }
+              }
+            }
+          },
+          "500":{
+            "description": "RESPOSTA ESPERADA AO OCORRER UM ERRO NA HORA DE EXCLUIR UM USUÁRIO",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref": "#/components/schemas/MessageErrorUserDelete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/user/login":{
       "post":{
         "description": "Efetua o login de um usuário previamente cadastrado",
@@ -656,6 +691,16 @@
 
       },
 
+      "MessageSuccessUserDel":{
+        "type": "string",
+        "example": "USUÁRIO EXCLUIDO"
+      },
+
+      "MessageErrorUserDel":{
+        "type": "string",
+        "example": "ERRO AO EXCLUIR USUÁRIO"
+      },
+
       "MessageErrorUpdateAdmin":{
        "type": "object",
        "properties": {
@@ -688,6 +733,24 @@
         "properties":{
           "MENSAGEM":{
             "$ref": "#/components/schemas/MessageSuccessValidateUser"
+          }
+        }
+      },
+
+      "MessageSuccessUserDelete":{
+        "type": "object",
+        "properties": {
+          "MENSAGEM":{
+            "$ref": "#/components/schemas/MessageSuccessUserDel"
+          }
+        }
+      },
+
+      "MessageErrorUserDelete":{
+        "type": "object",
+        "properties": {
+          "MENSAGEM":{
+            "$ref": "#/components/schemas/MessageErrorUserDel"
           }
         }
       },

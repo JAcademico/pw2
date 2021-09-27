@@ -26,6 +26,14 @@ class UserCtrl {
         await (0, functions_1.sendEmail)(result);
         return resp.status(201).json(userview_1.default.reder(result));
     }
+    static async delete(req, resp) {
+        const { id } = req.params;
+        const result = await userdao_1.default.delete(id);
+        if (result != null) {
+            return resp.status(200).json({ MENSAGEM: 'USUÁRIO EXCLUIDO' });
+        }
+        return resp.status(500).json({ MENSAGEM: 'ERRO AO EXCLUIR USUÁRIO' });
+    }
     static async list(req, resp) {
         const users = (await userdao_1.default.list());
         if (users != null) {

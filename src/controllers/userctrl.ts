@@ -30,6 +30,17 @@ export default class UserCtrl {
     return resp.status(201).json(userview.reder(result as UserI));
   }
 
+  public static async delete(req: Request, resp: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const result = await UserDao.delete(id);
+
+    if (result != null) {
+      return resp.status(200).json({ MENSAGEM: 'USUÁRIO EXCLUIDO' });
+    }
+    return resp.status(500).json({ MENSAGEM: 'ERRO AO EXCLUIR USUÁRIO' });
+  }
+
   public static async list(req: Request, resp: Response): Promise<Response> {
     const users = (await UserDao.list()) as UserI[];
     if (users != null) {

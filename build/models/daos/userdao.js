@@ -21,6 +21,15 @@ class UserDao {
             return null;
         }
     }
+    static async delete(id) {
+        try {
+            const user = await user_1.default.destroy({ where: { id: Number(id) } });
+            return user;
+        }
+        catch (err) {
+            return null;
+        }
+    }
     static async search(id) {
         try {
             const user = await user_1.default.findOne({ where: { email: id } });
