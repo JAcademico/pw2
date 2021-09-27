@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import ContactDao from '../models/daos/contactdao';
 import UserDao from '../models/daos/userdao';
-import { getCookie, verifyToken } from '../utils/functions';
+import { decryptObject, verifyToken } from '../utils/functions';
 import { ContactI, UserI } from '../utils/interfaces';
 import contactview from '../views/contactview';
 
 export default class ContactCtrl {
   public static async add(req: Request, resp: Response): Promise<Response> {
-    const { name, telephone } = req.body;
-    const data = getCookie(req);
+    const { name, telephone, token } = req.body;
+    const data = decryptObject(token) as UserI;
     if (data != null) {
       if (verifyToken(`${data.token}`)) {
         const contact = await ContactDao.add(
@@ -26,8 +26,8 @@ export default class ContactCtrl {
   }
 
   public static async update(req: Request, resp: Response): Promise<Response> {
-    const { id, name, telephone } = req.body;
-    const data = getCookie(req);
+    const { id, name, telephone, token } = req.body;
+    const data = decryptObject(token) as UserI;
     if (data != null) {
       if (verifyToken(`${data.token}`)) {
         const contactUpdate = await ContactDao.update({
@@ -46,10 +46,10 @@ export default class ContactCtrl {
   }
 
   public static async search(req: Request, resp: Response): Promise<Response> {
-    const data = getCookie(req);
+    const { id, token } = req.body;
+    const data = decryptObject(token) as UserI;
     if (data != null) {
       if (verifyToken(`${data.token}`)) {
-        const { id } = req.params;
         const contact = await ContactDao.search(Number(id));
         if (contact != null) {
           return resp.status(200).json(contactview.render(contact as ContactI));
@@ -62,10 +62,10 @@ export default class ContactCtrl {
   }
 
   public static async delete(req: Request, resp: Response): Promise<Response> {
-    const data = getCookie(req);
+    const { id, token } = req.body;
+    const data = decryptObject(token) as UserI;
     if (data != null) {
       if (verifyToken(`${data.token}`)) {
-        const { id } = req.params;
         const situation = await ContactDao.delete(Number(id));
         if (situation) {
           return resp
@@ -80,7 +80,8 @@ export default class ContactCtrl {
   }
 
   public static async list(req: Request, resp: Response): Promise<Response> {
-    const data = getCookie(req);
+    const { token } = req.body;
+    const data = decryptObject(token) as UserI;
     if (data != null) {
       if (verifyToken(`${data.token}`)) {
         const contacts = (await UserDao.listContacts(`${data.id}`)) as UserI;

@@ -281,27 +281,6 @@
       }
     },
 
-    "/user/logout":{
-      "get":{
-        "description": "Efetua o logout do usuário que logou no sistema",
-        "operationId": "userLogout",
-        "parameters": [],
-        "required": true,
-        "responses":{
-          "200":{
-            "description": "RESPOSTA ESPERADA QUANDO O USUÁRIO EFETUAR LOGOUT",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/MessageSuccessUserLogout"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
     "/user/validate/{id}":{
       "get":{
         "description": "Valida o usuário via url recebida pelo email com um id",
@@ -454,28 +433,8 @@
         }
 
       }
-    },
-
-    "/administrator/logout":{
-      "get":{
-        "description": "Efetua o logout do administrador no sistema",
-        "operationId": "adminLogout",
-        "parameters": [],
-        "required": true,
-        "responses":{
-          "200":{
-            "description": "RESPOSTA ESPERADA QUANDO O ADMINISTRADOR EFETUAR LOGOUT",
-            "content":{
-              "application/json":{
-                "schema":{
-                  "$ref":"#/components/schemas/MessageSuccessUserLogout"
-                }
-              }
-            }
-          }
-        }
-      }
     }
+
   },
 
   "components":{
@@ -518,6 +477,11 @@
       "active":{
         "type": "boolean",
         "example": false
+      },
+
+      "token":{
+        "type": "string",
+        "example": "eyJpZCI6IjMiLCJ1c2VybmFtZSI6IkphbWVzUCIsImVtYWlsIjoiamFtZXMucGVyZWlyYUBhY2FkZW1pY28uaWZwYi5lZHUuYnIiLCJhY3RpdmUiOnRydWUsInRva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBaQ0k2SWpNaUxDSnBZWFFpT2pFMk16STNNREE1TVRnc0ltVjRjQ0k2TVRZek1qY3dPREV4T0gwLlFUeEg2U3I0LTRZNGMtaEo1dkxUdEhHbXlZYzhjQzA4U3hydXF4cHZoNDQifQ=="
       },
 
       "ContactCreate":{
@@ -604,10 +568,6 @@
         "example": "ERRO AO RECUPERAR TODOS OS CONTATOS"
       },
 
-      "MessageSuccessLogoutUser":{
-        "type": "string",
-        "example": "LOGOUT EFETUADO COM SUCESSO"
-      },
 
       "MessageSuccessValidateUser":{
         "type": "string",
@@ -780,6 +740,15 @@
 
           "password":{
             "$ref": "#/components/schemas/password"
+          }
+        }
+      },
+
+      "AdminLoginSuccess":{
+        "type": "object",
+        "properties":{
+          "token":{
+            "$ref":"#/components/schemas/token"
           }
         }
       },

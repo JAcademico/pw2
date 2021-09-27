@@ -5,6 +5,7 @@ exports.default = {
         return {
             id: admin.id,
             codeAccess: admin.codeAccess,
+            token: admin.token,
         };
     },
 };

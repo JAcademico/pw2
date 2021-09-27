@@ -7,6 +7,7 @@ export default {
       username: user.username,
       email: user.email,
       active: user.active,
+      token: user.token,
     };
   },
   renderMany(users: UserI[]): UserI[] {

@@ -37,27 +37,19 @@ class UserCtrl {
         const { email, password } = req.body;
         const user = (await userdao_1.default.search(email));
         if (user != null) {
+            user.token = await (0, functions_1.generateToken)(String(user.id));
             const validePassword = await bcrypt_1.default.compare(password, String(user.password));
             if (validePassword && user.active) {
+                console.log(user);
                 return resp
-                    .cookie('user_data', Buffer.from(JSON.stringify(await (0, functions_1.generateObject)(user))).toString('base64'), {
-                    httpOnly: true,
-                    secure: false,
-                })
                     .status(200)
-                    .json(userview_1.default.reder(user));
+                    .json({ token: (0, functions_1.criptObjectUser)(userview_1.default.reder(user)) });
             }
             return resp
                 .status(400)
                 .json({ MENSAGEM: 'SENHA INCORRETA OU USUÁRIO NÃO EXISTE' });
         }
         return resp.status(404).json({ MENSAGEM: 'USUÁRIO NÃO EXISTE' });
-    }
-    static async logout(req, resp) {
-        return resp
-            .clearCookie('user_data')
-            .status(200)
-            .json({ MENSAGEM: 'LOGOUT EFETUADO COM SUCESSO' });
     }
     static async validateAccount(req, resp) {
         const { id } = req.params;

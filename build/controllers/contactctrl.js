@@ -9,8 +9,8 @@ const functions_1 = require("../utils/functions");
 const contactview_1 = __importDefault(require("../views/contactview"));
 class ContactCtrl {
     static async add(req, resp) {
-        const { name, telephone } = req.body;
-        const data = (0, functions_1.getCookie)(req);
+        const { name, telephone, token } = req.body;
+        const data = (0, functions_1.decryptObject)(token);
         if (data != null) {
             if ((0, functions_1.verifyToken)(`${data.token}`)) {
                 const contact = await contactdao_1.default.add({ name: name, telephone: telephone }, `${data.id}`);
@@ -24,8 +24,8 @@ class ContactCtrl {
         return resp.status(500).json({ MENSSAGEM: 'ERRO AO SALVAR CONTATO' });
     }
     static async update(req, resp) {
-        const { id, name, telephone } = req.body;
-        const data = (0, functions_1.getCookie)(req);
+        const { id, name, telephone, token } = req.body;
+        const data = (0, functions_1.decryptObject)(token);
         if (data != null) {
             if ((0, functions_1.verifyToken)(`${data.token}`)) {
                 const contactUpdate = await contactdao_1.default.update({
@@ -43,10 +43,10 @@ class ContactCtrl {
         return resp.status(500).json({ MENSAGEM: 'ERRO AO ATUALIZAR CONTATO' });
     }
     static async search(req, resp) {
-        const data = (0, functions_1.getCookie)(req);
+        const { id, token } = req.body;
+        const data = (0, functions_1.decryptObject)(token);
         if (data != null) {
             if ((0, functions_1.verifyToken)(`${data.token}`)) {
-                const { id } = req.params;
                 const contact = await contactdao_1.default.search(Number(id));
                 if (contact != null) {
                     return resp.status(200).json(contactview_1.default.render(contact));
@@ -58,10 +58,10 @@ class ContactCtrl {
         return resp.status(500).json({ MENSAGEM: 'ERRO AO BUSCAR CONTATO' });
     }
     static async delete(req, resp) {
-        const data = (0, functions_1.getCookie)(req);
+        const { id, token } = req.body;
+        const data = (0, functions_1.decryptObject)(token);
         if (data != null) {
             if ((0, functions_1.verifyToken)(`${data.token}`)) {
-                const { id } = req.params;
                 const situation = await contactdao_1.default.delete(Number(id));
                 if (situation) {
                     return resp
@@ -75,7 +75,8 @@ class ContactCtrl {
         return resp.status(500).json({ MENSAGEM: 'ERRO AO EXCLUIR CONTATO' });
     }
     static async list(req, resp) {
-        const data = (0, functions_1.getCookie)(req);
+        const { token } = req.body;
+        const data = (0, functions_1.decryptObject)(token);
         if (data != null) {
             if ((0, functions_1.verifyToken)(`${data.token}`)) {
                 const contacts = (await userdao_1.default.listContacts(`${data.id}`));

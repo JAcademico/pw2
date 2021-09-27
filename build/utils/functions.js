@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAdmin = exports.generateObjectAdmin = exports.getCookie = exports.verifyToken = exports.generateObject = exports.sendEmail = exports.validadeAccount = void 0;
+exports.decryptObject = exports.criptObjectUser = exports.criptObjectAdmin = exports.generateToken = exports.verifyToken = exports.sendEmail = exports.validadeAccount = void 0;
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -14,6 +14,7 @@ const generateToken = async (id) => {
         expiresIn: 7200,
     });
 };
+exports.generateToken = generateToken;
 const validadeAccount = async (codeAccess) => {
     const user = await userdao_1.default.updateAccessId(codeAccess);
     console.log(user);
@@ -39,7 +40,7 @@ const sendEmail = async (user) => {
         text: 'Acesse o link para acessar a sua conta',
         html: `<h2>Click no link para validar a sua conta</h2>
      <br/>
-     <a href='http://localhost:8080/user/validate/${user.codeAccess}'>Click para validar</a>`,
+     <a href='https://apipw2if.herokuapp.com/user/validate/${user.codeAccess}'>Click para validar</a>`,
     };
     try {
         await mail_1.default.send(message);
@@ -49,38 +50,15 @@ const sendEmail = async (user) => {
     }
 };
 exports.sendEmail = sendEmail;
-const getCookie = (req) => {
-    const data = String(req.cookies.user_data);
-    if (data.length > 0) {
-        return JSON.parse(Buffer.from(data, 'base64').toString('ascii'));
-    }
-    return null;
+const criptObjectUser = (user) => {
+    return Buffer.from(JSON.stringify(user)).toString('base64');
 };
-exports.getCookie = getCookie;
-const getAdmin = (req) => {
-    const data = String(req.cookies.admin_data);
-    if (data === 'undefined') {
-        return null;
-    }
-    if (data.length > 0) {
-        return JSON.parse(Buffer.from(data, 'base64').toString('ascii'));
-    }
-    return null;
+exports.criptObjectUser = criptObjectUser;
+const criptObjectAdmin = (admin) => {
+    return Buffer.from(JSON.stringify(admin)).toString('base64');
 };
-exports.getAdmin = getAdmin;
-const generateObject = async (user) => {
-    return {
-        id: user.id,
-        email: user.email,
-        token: await generateToken(`${user.id}`),
-    };
+exports.criptObjectAdmin = criptObjectAdmin;
+const decryptObject = (token) => {
+    return JSON.parse(Buffer.from(token, 'base64').toString('ascii'));
 };
-exports.generateObject = generateObject;
-const generateObjectAdmin = async (admin) => {
-    return {
-        id: admin.id,
-        codeAccess: admin.codeAccess,
-        token: await generateToken(`${admin.id}`),
-    };
-};
-exports.generateObjectAdmin = generateObjectAdmin;
+exports.decryptObject = decryptObject;

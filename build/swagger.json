@@ -273,26 +273,6 @@
                 }
             }
         },
-        "/user/logout": {
-            "get": {
-                "description": "Efetua o logout do usuário que logou no sistema",
-                "operationId": "userLogout",
-                "parameters": [],
-                "required": true,
-                "responses": {
-                    "200": {
-                        "description": "RESPOSTA ESPERADA QUANDO O USUÁRIO EFETUAR LOGOUT",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/MessageSuccessUserLogout"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/user/validate/{id}": {
             "get": {
                 "description": "Valida o usuário via url recebida pelo email com um id",
@@ -431,26 +411,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/MessageErrorUpdateAdmin"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/administrator/logout": {
-            "get": {
-                "description": "Efetua o logout do administrador no sistema",
-                "operationId": "adminLogout",
-                "parameters": [],
-                "required": true,
-                "responses": {
-                    "200": {
-                        "description": "RESPOSTA ESPERADA QUANDO O ADMINISTRADOR EFETUAR LOGOUT",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/MessageSuccessUserLogout"
                                 }
                             }
                         }

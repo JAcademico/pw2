@@ -3,7 +3,12 @@ import bcrypt from 'bcrypt';
 import UserDao from '../models/daos/userdao';
 import { UserI } from '../utils/interfaces';
 import userview from '../views/userview';
-import { generateObject, sendEmail, validadeAccount } from '../utils/functions';
+import {
+  criptObjectUser,
+  generateToken,
+  sendEmail,
+  validadeAccount,
+} from '../utils/functions';
 
 export default class UserCtrl {
   public static async add(req: Request, resp: Response): Promise<Response> {
@@ -37,37 +42,22 @@ export default class UserCtrl {
     const { email, password } = req.body;
     const user = (await UserDao.search(email)) as UserI;
     if (user != null) {
+      user.token = await generateToken(String(user.id));
       const validePassword = await bcrypt.compare(
         password,
         String(user.password),
       );
       if (validePassword && user.active) {
+        console.log(user);
         return resp
-          .cookie(
-            'user_data',
-            Buffer.from(JSON.stringify(await generateObject(user))).toString(
-              'base64',
-            ),
-            {
-              httpOnly: true,
-              secure: false,
-            },
-          )
           .status(200)
-          .json(userview.reder(user));
+          .json({ token: criptObjectUser(userview.reder(user)) });
       }
       return resp
         .status(400)
         .json({ MENSAGEM: 'SENHA INCORRETA OU USUÁRIO NÃO EXISTE' });
     }
     return resp.status(404).json({ MENSAGEM: 'USUÁRIO NÃO EXISTE' });
-  }
-
-  public static async logout(req: Request, resp: Response): Promise<Response> {
-    return resp
-      .clearCookie('user_data')
-      .status(200)
-      .json({ MENSAGEM: 'LOGOUT EFETUADO COM SUCESSO' });
   }
 
   public static async validateAccount(
