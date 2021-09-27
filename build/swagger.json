@@ -69,7 +69,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ContactCreate"
+                                "$ref": "#/components/schemas/ContactCreateWithToken"
                             }
                         }
                     }
@@ -91,16 +91,21 @@
                 }
             }
         },
-        "/contact/delete/{id}": {
+        "/contact/delete": {
             "delete": {
                 "description": "Deleta um contato existente da lista",
                 "operationId": "contactDelete",
-                "parameters": [{
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }],
+                "parameters": [],
                 "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactDeleteWithToken"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "204": {
                         "description": "RESPOSTA AO SE CONSEGUIR EXCLUIR UM CONTATO EXISTENTE NA LISTA"
@@ -118,16 +123,21 @@
                 }
             }
         },
-        "/contact/search/{id}": {
-            "get": {
+        "/contact/search": {
+            "post": {
                 "description": "Busca por um contato específico, através do seu id",
                 "operationId": "contactSearch",
-                "parameters": [{
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }],
+                "parameters": [],
                 "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactDeleteWithToken"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "RESPOSTA AO SE ENCONTRAR UM CONTATO PELO ID",
@@ -153,11 +163,20 @@
             }
         },
         "/contact/list": {
-            "get": {
+            "post": {
                 "description": "Lista todos os contatos existentes",
                 "operationId": "contactList",
                 "parameters": [],
                 "required": true,
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContactToken"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "RESPOSTA ESPERADA AO SE LISTAR OS CONTATOS",
@@ -245,7 +264,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/MessageRespLoginOne"
+                                    "$ref": "#/components/schemas/ContactToken"
                                 }
                             }
                         }
@@ -351,7 +370,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AdminCreate"
+                                    "$ref": "#/components/schemas/ContactToken"
                                 }
                             }
                         }
@@ -389,7 +408,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/AdminLogin"
+                                "$ref": "#/components/schemas/AdminUpdate"
                             }
                         }
                     }
@@ -400,7 +419,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AdminCreate"
+                                    "$ref": "#/components/schemas/ContactToken"
                                 }
                             }
                         }
@@ -453,6 +472,10 @@
                 "type": "boolean",
                 "example": false
             },
+            "token": {
+                "type": "string",
+                "example": "eyJpZCI6IjMiLCJ1c2VybmFtZSI6IkphbWVzUCIsImVtYWlsIjoiamFtZXMucGVyZWlyYUBhY2FkZW1pY28uaWZwYi5lZHUuYnIiLCJhY3RpdmUiOnRydWUsInRva2VuIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBaQ0k2SWpNaUxDSnBZWFFpT2pFMk16STNNREE1TVRnc0ltVjRjQ0k2TVRZek1qY3dPREV4T0gwLlFUeEg2U3I0LTRZNGMtaEo1dkxUdEhHbXlZYzhjQzA4U3hydXF4cHZoNDQifQ=="
+            },
             "ContactCreate": {
                 "type": "object",
                 "properties": {
@@ -464,6 +487,42 @@
                     },
                     "telephone": {
                         "$ref": "#/components/schemas/telephone"
+                    }
+                }
+            },
+            "ContactDeleteWithToken": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/id"
+                    },
+                    "token": {
+                        "$ref": "#/components/schemas/token"
+                    }
+                }
+            },
+            "ContactToken": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "$ref": "#/components/schemas/token"
+                    }
+                }
+            },
+            "ContactCreateWithToken": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/id"
+                    },
+                    "name": {
+                        "$ref": "#/components/schemas/name"
+                    },
+                    "telephone": {
+                        "$ref": "#/components/schemas/telephone"
+                    },
+                    "token": {
+                        "$ref": "#/components/schemas/token"
                     }
                 }
             },
@@ -493,6 +552,9 @@
                     "codeAccess": {
                         "$ref": "#/components/schemas/codeAccess"
                     }
+                },
+                "token": {
+                    "$ref": "#/components/schemas/token"
                 }
             },
             "MessageErrorContactAdd": {
@@ -526,10 +588,6 @@
             "MessageErrorContactList": {
                 "type": "string",
                 "example": "ERRO AO RECUPERAR TODOS OS CONTATOS"
-            },
-            "MessageSuccessLogoutUser": {
-                "type": "string",
-                "example": "LOGOUT EFETUADO COM SUCESSO"
             },
             "MessageSuccessValidateUser": {
                 "type": "string",
@@ -655,6 +713,9 @@
                     },
                     "telephone": {
                         "$ref": "#/components/schemas/telephone"
+                    },
+                    "token": {
+                        "$ref": "#/components/schemas/token"
                     }
                 }
             },
@@ -683,6 +744,20 @@
                     }
                 }
             },
+            "AdminUpdate": {
+                "type": "object",
+                "properties": {
+                    "codeAccess": {
+                        "$ref": "#/components/schemas/codeAccess"
+                    },
+                    "password": {
+                        "$ref": "#/components/schemas/password"
+                    },
+                    "token": {
+                        "$ref": "#/components/schemas/token"
+                    }
+                }
+            },
             "UserLogin": {
                 "type": "object",
                 "properties": {
@@ -691,18 +766,6 @@
                     },
                     "password": {
                         "$ref": "#/components/schemas/password"
-                    }
-                }
-            },
-            "MessageRespLoginO": {
-                "type": "string",
-                "example": "LOGIN EFETUADO COM SUCESSO"
-            },
-            "MessageRespLoginOne": {
-                "type": "object",
-                "properties": {
-                    "MENSAGEM": {
-                        "$ref": "#/components/schemas/MessageRespLoginO"
                     }
                 }
             },

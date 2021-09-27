@@ -71,7 +71,7 @@
           "content":{
             "application/json":{
               "schema":{
-                "$ref":"#/components/schemas/ContactCreate"
+                "$ref":"#/components/schemas/ContactCreateWithToken"
               }
             }
           }
@@ -94,16 +94,21 @@
       }
     },
 
-    "/contact/delete/{id}":{
+    "/contact/delete":{
       "delete":{
         "description": "Deleta um contato existente da lista",
         "operationId": "contactDelete",
-        "parameters":[{
-          "name": "id",
-          "in": "path",
-          "required":true
-        }],
+        "parameters":[],
         "required": true,
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/ContactDeleteWithToken"
+              }
+            }
+          }
+        },
         "responses": {
           "204":{
             "description": "RESPOSTA AO SE CONSEGUIR EXCLUIR UM CONTATO EXISTENTE NA LISTA"
@@ -122,16 +127,21 @@
       }
     },
 
-    "/contact/search/{id}":{
-      "get":{
+    "/contact/search":{
+      "post":{
         "description": "Busca por um contato específico, através do seu id",
         "operationId": "contactSearch",
-        "parameters":[{
-          "name": "id",
-          "in": "path",
-          "required":true
-        }],
+        "parameters":[],
         "required": true,
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/ContactDeleteWithToken"
+              }
+            }
+          }
+        },
         "responses": {
           "200":{
             "description": "RESPOSTA AO SE ENCONTRAR UM CONTATO PELO ID",
@@ -158,11 +168,20 @@
     },
 
     "/contact/list":{
-      "get":{
+      "post":{
         "description": "Lista todos os contatos existentes",
         "operationId": "contactList",
         "parameters":[],
         "required": true,
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "$ref":"#/components/schemas/ContactToken"
+              }
+            }
+          }
+        },
         "responses": {
           "200":{
             "description": "RESPOSTA ESPERADA AO SE LISTAR OS CONTATOS",
@@ -252,7 +271,7 @@
             "content":{
               "application/json":{
                 "schema":{
-                  "$ref":"#/components/schemas/MessageRespLoginOne"
+                  "$ref":"#/components/schemas/ContactToken"
                 }
               }
             }
@@ -361,7 +380,7 @@
             "content":{
               "application/json":{
                 "schema":{
-                  "$ref":"#/components/schemas/AdminCreate"
+                  "$ref":"#/components/schemas/ContactToken"
                 }
               }
             }
@@ -403,7 +422,7 @@
           "content":{
             "application/json":{
               "schema":{
-                "$ref": "#/components/schemas/AdminLogin"
+                "$ref": "#/components/schemas/AdminUpdate"
               }
             }
           }
@@ -414,7 +433,7 @@
             "content":{
               "application/json":{
                 "schema":{
-                  "$ref": "#/components/schemas/AdminCreate"
+                  "$ref": "#/components/schemas/ContactToken"
                 }
               }
             }
@@ -499,6 +518,45 @@
         }
       },
 
+      "ContactDeleteWithToken":{
+        "type": "object",
+        "properties":{
+          "id":{
+            "$ref":"#/components/schemas/id"
+          },
+          "token":{
+            "$ref":"#/components/schemas/token"
+          }
+        }
+      },
+
+      "ContactToken":{
+        "type": "object",
+        "properties":{
+          "token":{
+            "$ref":"#/components/schemas/token"
+          }
+        }
+      },
+
+      "ContactCreateWithToken":{
+        "type": "object",
+        "properties":{
+          "id":{
+            "$ref":"#/components/schemas/id"
+          },
+          "name":{
+            "$ref":"#/components/schemas/name"
+          },
+          "telephone":{
+            "$ref":"#/components/schemas/telephone"
+          },
+          "token":{
+            "$ref":"#/components/schemas/token"
+          }
+        }
+      },
+
       "UserCreate":{
         "type":"object",
         "properties":{
@@ -526,6 +584,9 @@
           "codeAccess":{
             "$ref":"#/components/schemas/codeAccess"
           }
+        },
+        "token":{
+          "$ref": "#/components/schemas/token"
         }
       },
 
@@ -712,6 +773,9 @@
           },
           "telephone":{
             "$ref":"#/components/schemas/telephone"
+          },
+          "token":{
+            "$ref":"#/components/schemas/token"
           }
         }
       },
@@ -744,9 +808,15 @@
         }
       },
 
-      "AdminLoginSuccess":{
-        "type": "object",
+      "AdminUpdate":{
+        "type":"object",
         "properties":{
+          "codeAccess":{
+            "$ref":"#/components/schemas/codeAccess"
+          },
+          "password":{
+            "$ref":"#/components/schemas/password"
+          },
           "token":{
             "$ref":"#/components/schemas/token"
           }
@@ -761,20 +831,6 @@
           },
           "password":{
             "$ref":"#/components/schemas/password"
-          }
-        }
-      },
-
-      "MessageRespLoginO":{
-        "type":"string",
-        "example": "LOGIN EFETUADO COM SUCESSO"
-      },
-
-      "MessageRespLoginOne":{
-        "type": "object",
-        "properties":{
-          "MENSAGEM":{
-            "$ref":"#/components/schemas/MessageRespLoginO"
           }
         }
       },
